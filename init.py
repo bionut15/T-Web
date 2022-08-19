@@ -6,15 +6,20 @@ from PyQt5 import QtGui
 
 class MainWindow(QMainWindow):
     def __init__(self):
-        super().__init__()
+        super(MainWindow, self).__init__()
         
         #Main window configuration
        
         self.setWindowFlag(Qt.FramelessWindowHint)
         self.setFixedSize(QSize(1600, 900))
-       # self.setAttribute(Qt.WA_TranslucentBackground)
-   
-       
+        self.setWindowOpacity(0.6)
+
+        self.setStyleSheet(
+        """ 
+            background: rgba(70, 70, 70, 0.58);
+            border: 1px solid #BBBBBB;
+            border-radius: 20px;
+                """)
 
 if __name__ == "__main__":
     import sys
