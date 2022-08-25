@@ -11,18 +11,19 @@ class MainWindow(QMainWindow):
         
         #Main window configuration
         self.setWindowFlag(Qt.FramelessWindowHint)
-        self.setFixedSize(QSize(1600, 900))
-       #self.setWindowOpacity(0.6)
+        self.setMinimumSize(QSize(1600, 900))
         self.setStyleSheet(
         """
             background: rgba(70, 70, 70, 0.58);
             border: 1px solid #BBBBBB;
             border-radius: 20px;
                 """)
-    #Border settings
+        self.ui_componets()
+    def ui_componets(self):
+  #Border settings
             #close button
         cbutton = QPushButton('', self)
-        cbutton.clicked.connect(self.clickMethod)
+        cbutton.clicked.connect(QApplication.instance().quit)
         cbutton.resize(20,20)
         cbutton.move(1560,18)   
         cbutton.setStyleSheet(
@@ -37,7 +38,7 @@ class MainWindow(QMainWindow):
                 """)
             #maximize button
         mbutton = QPushButton('', self)
-        mbutton.clicked.connect(self.clickMethod)
+        mbutton.clicked.connect(self.maximize)
         mbutton.resize(20,20)
         mbutton.move(1530,18) 
         mbutton.setStyleSheet(
@@ -50,10 +51,9 @@ class MainWindow(QMainWindow):
             background: #34FF6D;
             border-radius : 10px;
                 """)
-
             #minimize button
         nbutton = QPushButton('', self)
-        nbutton.clicked.connect(self.clickMethod)
+        nbutton.clicked.connect(self.minimize)
         nbutton.resize(20,20)
         nbutton.move(1500,18)        
         nbutton.setStyleSheet(
@@ -88,9 +88,10 @@ class MainWindow(QMainWindow):
             background: rgba(255, 255, 255, 0.21);
             border-radius: 20px;
                 """)
-    def clickMethod(self):
-        print('Clicked Pyqt button.')
-
+    def minimize(self):
+        self.showMinimized()
+    def maximize(self):
+        self.showMaximized()
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
