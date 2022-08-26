@@ -3,7 +3,6 @@
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFrame 
 from PyQt5 import QtGui
-from BlurWindow.blurWindow import GlobalBlur
 
 class MainWindow(QMainWindow):
     def __init__(self):
