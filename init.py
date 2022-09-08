@@ -10,13 +10,16 @@ class MainWindow(QMainWindow):
         
         #Main window configuration
         self.setWindowFlag(Qt.FramelessWindowHint)
-        self.setMinimumSize(QSize(1600, 900))
-        self.setStyleSheet(
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.resize(1600, 900)
+        self.mainframe=QFrame(self)
+        self.mainframe.setStyleSheet(
         """
             background: rgba(70, 70, 70, 0.58);
             border: 1px solid #BBBBBB;
-            border-radius: 20px;
+            border-radius: 24px;
                 """)
+        self.setCentralWidget(self.mainframe)
         self.ui_componets()
     def ui_componets(self):
   #Border settings
@@ -73,7 +76,7 @@ class MainWindow(QMainWindow):
         frame.move(18,18)
         frame.setStyleSheet("""
             border: 1px solid #BBBBBB;
-            border-radius: 20px;     
+            border-radius: 16px;     
             background: #1B1D1E;
                 """)
     #widget area
@@ -85,12 +88,18 @@ class MainWindow(QMainWindow):
         widget.setStyleSheet("""
             position: absolute;
             background: rgba(255, 255, 255, 0.21);
-            border-radius: 20px;
+            border-radius: 16px;
                 """)
     def minimize(self):
         self.showMinimized()
     def maximize(self):
         self.showMaximized()
+    def resizeEvent(self, event):
+        path = QPainterPath()
+        print(self.rect())
+        path.addRoundedRect(QRectF(self.rect()),24, 24,Qt.AbsoluteSize)
+        reg = QRegion(path.toFillPolygon().toPolygon())
+        self.setMask(reg)
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)

@@ -1,40 +1,31 @@
-#this si a test
-from kivy.app import App
-from kivy.lang import Builder
-from kivy.config import Config
-from kivy.uix.floatlayout import FloatLayout
-
-Config.set("graphics", "width", "500")
-Config.set("graphics", "height", "300")
-
-kv = """
-<RoundedCornerLayout@FloatLayout>:
-    background_color: 0,0,0,0
-    canvas.before:
-        Color:
-            rgba: (.4,.4,.4,1)
-        RoundedRectangle:
-            pos: self.pos
-            size: self.size
-            radius: [(40, 40), (40, 40), (20, 20), (20, 20)]
-"""
-
-Builder.load_string(kv)
 
 
-class RoundedCornerLayout(FloatLayout):
-    def __init__(self):
-        super().__init__()
-        self.size_hint = (None, None)
-        self.size = (400, 200)
-        self.pos_hint = {"center_x": 0.5, "center_y": 0.5}
 
+import sys
+from PyQt5.QtCore import Qt,  QRectF
+from PyQt5.QtGui import QPainterPath, QRegion
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame
 
-class MainApp(App):
-    def build(self):
-        return RoundedCornerLayout()
+class Example(QMainWindow):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.resize(600,400)
+        self.mainframe=QFrame(self)
+        self.mainframe.setStyleSheet("background:blue;border-radius:25px")
+        self.setCentralWidget(self.mainframe)
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+    def resizeEvent(self, event):
+        path = QPainterPath()
+        print(self.rect())
+        path.addRoundedRect(QRectF(self.rect()),25, 25,Qt.AbsoluteSize)
+        reg = QRegion(path.toFillPolygon().toPolygon())
+        self.setMask(reg)     
 
-
+   
 if __name__ == "__main__":
-    MainApp().run()
+    app = QApplication(sys.argv)
+    window = Example()
+    window.show()
+    sys.exit(app.exec_())  
 
