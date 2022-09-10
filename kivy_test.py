@@ -1,31 +1,36 @@
-
-
-
 import sys
-from PyQt5.QtCore import Qt,  QRectF
-from PyQt5.QtGui import QPainterPath, QRegion
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFrame
+from PyQt5.QtWidgets import (QApplication, QWidget,
+QPushButton, QGridLayout)
 
-class Example(QMainWindow):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.resize(600,400)
-        self.mainframe=QFrame(self)
-        self.mainframe.setStyleSheet("background:blue;border-radius:25px")
-        self.setCentralWidget(self.mainframe)
-        self.setWindowFlags(Qt.FramelessWindowHint)
-        self.setAttribute(Qt.WA_TranslucentBackground)
-    def resizeEvent(self, event):
-        path = QPainterPath()
-        print(self.rect())
-        path.addRoundedRect(QRectF(self.rect()),25, 25,Qt.AbsoluteSize)
-        reg = QRegion(path.toFillPolygon().toPolygon())
-        self.setMask(reg)     
+class Example(QWidget):
 
-   
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = Example()
-    window.show()
-    sys.exit(app.exec_())  
+    def __init__(self):
+        super().__init__()
+        self.initUI()
 
+    def initUI(self):   
+        grid = QGridLayout()  
+        self.setLayout(grid)
+
+        names = ['Cls', 'Bck', '', 'Close', 
+        '7', '8', '9', '/',
+        '4', '5', '6', '*',
+        '1', '2', '3', '-',
+        '0', '.', '=', '+',]
+
+        positions = [(i, j) for i in range(5) for j in range(4)]
+
+        for position, name in zip(positions, names):
+         if name == '':
+          continue
+         button = QPushButton(name)
+         grid.addWidget(button, *position)
+
+        self.move(300, 150)
+        self.setWindowTitle('PyQt window')  
+        self.show()
+
+if __name__ == '__main__':
+     app = QApplication(sys.argv)
+     ex = Example()
+     sys.exit(app.exec_())    

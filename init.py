@@ -1,8 +1,9 @@
 #made by ionut b
 
-from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFrame 
+from PyQt5.QtCore import QSize, Qt, QRectF, QPoint
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFrame, QGridLayout 
 from PyQt5 import QtGui
+from PyQt5.QtGui import QPainterPath, QRegion
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -11,6 +12,7 @@ class MainWindow(QMainWindow):
         #Main window configuration
         self.setWindowFlag(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setMinimumSize(900, 750)
         self.resize(1600, 900)
         self.mainframe=QFrame(self)
         self.mainframe.setStyleSheet(
@@ -93,13 +95,24 @@ class MainWindow(QMainWindow):
     def minimize(self):
         self.showMinimized()
     def maximize(self):
-        self.showMaximized()
+        state = int(self.windowState())
+        if state == 0:
+            self.showMaximized()
+        else:
+             self.showNormal()
     def resizeEvent(self, event):
         path = QPainterPath()
         print(self.rect())
-        path.addRoundedRect(QRectF(self.rect()),24, 24,Qt.AbsoluteSize)
+        path.addRoundedRect(QRectF(self.rect()),25, 25,Qt.AbsoluteSize)
         reg = QRegion(path.toFillPolygon().toPolygon())
         self.setMask(reg)
+    def mousePressEvent(self, event):
+        self.oldPosition = event.globalPos()
+
+    def mouseMoveEvent(self, event):
+        delta = QPoint(event.globalPos() - self.oldPosition)
+        self.move(self.x() + delta.x(),self.y() + delta.y())
+        self.oldPosition = event.globalPos()
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
