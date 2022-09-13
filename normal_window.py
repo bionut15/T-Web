@@ -1,16 +1,15 @@
-#made by ionut b
 
 from PyQt5.QtCore import QSize, Qt, QRectF, QPoint
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFrame 
 from PyQt5 import QtGui
 from PyQt5.QtGui import QPainterPath, QRegion
 
-class MainWindow(QMainWindow):
+class MainWindow(QFrame):
     def __init__(self):
-        super(MainWindow, self).__init__()
+        super().__init__()
         #Main window configuration
         self.setWindowFlag(Qt.FramelessWindowHint)
-        self.setAttribute(Qt.WA_TranslucentBackground)
+       # self.setAttribute(Qt.WA_TranslucentBackground)
         self.setMinimumSize(900, 750)
         self.resize(1600, 900)
         self.mainframe=QFrame(self)
@@ -19,8 +18,9 @@ class MainWindow(QMainWindow):
             background: rgba(70, 70, 70, 0.58);
             border: 1px solid #BBBBBB;
             border-radius: 24px;
+            opacity: 0.21;
                 """)
-        self.setCentralWidget(self.mainframe)
+        # self.setCentralWidget(self.mainframe)
         self.ui_componets()
     def ui_componets(self):
   #Border settings
@@ -75,6 +75,7 @@ class MainWindow(QMainWindow):
             background: rgba(255, 255, 255, 0.21);
             border-radius: 16px;
                 """)
+
     def minimize(self):
         self.showMinimized()
     def maximize(self):
