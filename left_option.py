@@ -21,8 +21,6 @@ class tweb(QWidget):
             border: 1px solid #BBBBBB;
             border-radius: 24px;
             }""")
-    #     main_window = QWidgets.QWidget()
-     #    sizegrip = QtWidgets.QSizegrip(main_window)
     def ui_componets(self):
             #window area
          frame =QFrame(self)
@@ -74,6 +72,7 @@ class tweb(QWidget):
         self.move(self.x() + delta.x(),self.y() + delta.y())
         self.oldPosition = event.globalPos()
    # def size_screen_cal(self):
+   #add here formula for calculating the screen size and something 
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
