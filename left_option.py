@@ -3,7 +3,7 @@ from PyQt5.QtCore import QSize, Qt, QRectF, QPoint
 from PyQt5.QtWidgets import (QApplication, QPushButton, QFrame, QWidget, QGridLayout, QSizeGrip)
 from PyQt5 import QtGui
 from PyQt5.QtGui import QPainterPath, QRegion
-from qframelesswindow import FramelessWindow
+
 class tweb(QWidget):
     def __init__(self):
         super().__init__()
@@ -21,43 +21,14 @@ class tweb(QWidget):
             border: 1px solid #BBBBBB;
             border-radius: 24px;
             }""")
+    #     main_window = QWidgets.QWidget()
+     #    sizegrip = QtWidgets.QSizegrip(main_window)
     def ui_componets(self):
-          #close button
-         cbutton = QPushButton('', self)
-         cbutton.clicked.connect(QApplication.instance().quit)
-         cbutton.setFixedSize(20,20)
-         cbutton.move(1560,18)   
-         cbutton.setStyleSheet(
-         """
-            background: #FF2626;
-            border-radius: 10px;
-                """)
-           #maximize button
-         mbutton = QPushButton('', self)
-         mbutton.clicked.connect(self.maximize)
-         mbutton.setFixedSize(20,20)
-         mbutton.move(1530,18) 
-         mbutton.setStyleSheet(
-         """
-            background: #34FF6D;
-            border-radius : 10px;
-                """)
-            #minimize button
-         nbutton = QPushButton('', self)
-         nbutton.clicked.connect(self.minimize)
-         nbutton.setFixedSize(20,20)
-         nbutton.move(1500,18)        
-         nbutton.setStyleSheet(
-         """
-            background: #F0FF40;
-            border-radius : 10px; 
-                """)
-    #window area
+            #window area
          frame =QFrame(self)
          frame.setFrameShape(QFrame.StyledPanel)
          frame.setLineWidth(6)
          frame.resize(1300,864)
-         frame.move(18,18)
          frame.setStyleSheet("""
             border: 1px solid #BBBBBB;
             border-radius: 16px;     
@@ -67,8 +38,7 @@ class tweb(QWidget):
          widget =QFrame(self)
          widget.setFrameShape(QFrame.StyledPanel)
          widget.setLineWidth(6)
-         widget.move(1332, 50)
-         widget.resize(250, 832)
+         widget.setFixedWidth(250)
          widget.setStyleSheet("""
             background: rgba(255, 255, 255, 0.21);
             border-radius: 16px;
@@ -76,14 +46,16 @@ class tweb(QWidget):
 #grid system 
          grid = QGridLayout()
          self.setLayout(grid)
-         grid.addWidget(widget,1,2,3,3)
-         grid.addWidget(frame,0,1,4,1)
-         grid.addWidget(nbutton,0,2)
-         grid.addWidget(mbutton,0,3)
-         grid.addWidget(cbutton,0,4)
-    def minimize(self):
+         grid.addWidget(widget,0,0,1,1)
+         grid.addWidget(frame,0,1,1,1)
+         grid.setColumnMinimumWidth(1,1)
+         grid.setHorizontalSpacing(12)
+         sizegrip = QSizeGrip(self)
+         sizegrip.setVisible(0)
+#to be added
+    def mouseMiddleClickEvent(self, event):
         self.showMinimized()
-    def maximize(self):
+    def mouseDoubleClickEvent(self, event):
         state = int(self.windowState())
         if state == 0:
             self.showMaximized()
@@ -101,7 +73,7 @@ class tweb(QWidget):
         delta = QPoint(event.globalPos() - self.oldPosition)
         self.move(self.x() + delta.x(),self.y() + delta.y())
         self.oldPosition = event.globalPos()
-   
+   # def size_screen_cal(self):
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
