@@ -50,9 +50,7 @@ class tweb(QWidget):
          grid.setHorizontalSpacing(12)
          sizegrip = QSizeGrip(self)
          sizegrip.setVisible(0)
-#to be added
-    def mouseMiddleClickEvent(self, event):
-        self.showMinimized()
+#
     def mouseDoubleClickEvent(self, event):
         state = int(self.windowState())
         if state == 0:
