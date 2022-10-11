@@ -2,7 +2,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QPoint
 from PyQt5.QtGui import QPainterPath, QRegion
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFrame, QSizeGrip, QGridLayout 
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFrame, QSizeGrip, QGridLayout, QVBoxLayout 
 
 class SideGrip(QtWidgets.QWidget):
     def __init__(self, parent, edge):
@@ -63,7 +63,7 @@ class Main(QtWidgets.QMainWindow):
         QtWidgets.QMainWindow.__init__(self)
 
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-       # self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
         self.sideGrips = [
             SideGrip(self, QtCore.Qt.LeftEdge), 
             SideGrip(self, QtCore.Qt.TopEdge), 
@@ -79,9 +79,10 @@ class Main(QtWidgets.QMainWindow):
         self.mainframe=QFrame(self)
         self.mainframe.setStyleSheet(
         """
-            background: rgba(70, 70, 70, 0.58);
+        background-color:rgba(r, g, b, alpha);
             border: 1px solid #BBBBBB;
             border-radius: 24px;
+            opacity: 0.6;
                 """)
         self.setCentralWidget(self.mainframe)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground, True)
@@ -95,6 +96,7 @@ class Main(QtWidgets.QMainWindow):
             background: #1B1D1E;
                 """)
         self.setCentralWidget(frame)
+    #Grid main
         grid_1 = QGridLayout()
         grid_1.setHorizontalSpacing(10)
         grid_1.setVerticalSpacing(10)
@@ -115,6 +117,9 @@ class Main(QtWidgets.QMainWindow):
             border-radius: 16px;
         """)
         grid_1.addWidget(widgets_area,0,0,1,1)
+   #Grid second
+        grid_2 = QVBoxLayout()
+        widgets_area.setLayout(grid_2)
     @property
     def gripSize(self):
         return self._gripSize
