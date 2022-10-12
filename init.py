@@ -130,7 +130,7 @@ class Main(QtWidgets.QMainWindow):
         self.browser = QWebEngineView()
         self.browser.setUrl(QUrl("https://google.com"))
         grid_3.addWidget(self.browser)
-        grid_3.setVerticalSpacing(0)
+        grid_3.setVerticalSpacing(-1)
     @property
     def gripSize(self):
         return self._gripSize
