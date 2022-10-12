@@ -1,9 +1,11 @@
 #made by ionut b
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QPoint
+from PyQt5.QtCore import *
 from PyQt5.QtGui import QPainterPath, QRegion
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFrame, QSizeGrip, QGridLayout, QVBoxLayout 
-
+from PyQt5.QtWebEngineWidgets import *
+from PyQt5.QtPrintSupport import *
+import os
 class SideGrip(QtWidgets.QWidget):
     def __init__(self, parent, edge):
         QtWidgets.QWidget.__init__(self, parent)
@@ -120,6 +122,15 @@ class Main(QtWidgets.QMainWindow):
    #Grid second
         grid_2 = QVBoxLayout()
         widgets_area.setLayout(grid_2)
+        #self.status = QStatusBar()
+        #grid_2.addWidget(self.status)
+    #Grid third
+        grid_3 = QGridLayout()
+        window_1.setLayout(grid_3)
+        self.browser = QWebEngineView()
+        self.browser.setUrl(QUrl("https://google.com"))
+        grid_3.addWidget(self.browser)
+        grid_3.setVerticalSpacing(0)
     @property
     def gripSize(self):
         return self._gripSize
