@@ -2,7 +2,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QPainterPath, QRegion
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFrame, QSizeGrip, QGridLayout, QVBoxLayout, QStatusBar 
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFrame, QSizeGrip, QGridLayout, QVBoxLayout, QStatusBar, QHBoxLayout, QAction
 from PyQt5.QtWebEngineWidgets import *
 from PyQt5.QtPrintSupport import *
 import os
@@ -28,37 +28,29 @@ class SideGrip(QtWidgets.QWidget):
         geo = window.geometry()
         geo.setLeft(geo.right() - width)
         window.setGeometry(geo)
-
     def resizeTop(self, delta):
         window = self.window()
         height = max(window.minimumHeight(), window.height() - delta.y())
         geo = window.geometry()
         geo.setTop(geo.bottom() - height)
         window.setGeometry(geo)
-
     def resizeRight(self, delta):
         window = self.window()
         width = max(window.minimumWidth(), window.width() + delta.x())
         window.resize(width, window.height())
-
     def resizeBottom(self, delta):
         window = self.window()
         height = max(window.minimumHeight(), window.height() + delta.y())
         window.resize(window.width(), height)
-
     def mousePressEvent(self, event):
         if event.button() == QtCore.Qt.LeftButton:
             self.mousePos = event.pos()
-
     def mouseMoveEvent(self, event):
         if self.mousePos is not None:
             delta = event.pos() - self.mousePos
             self.resizeFunc(delta)
-
     def mouseReleaseEvent(self, event):
         self.mousePos = None
-
-
 class Main(QtWidgets.QMainWindow):
     _gripSize = 8
     def __init__(self):
@@ -77,7 +69,6 @@ class Main(QtWidgets.QMainWindow):
         # alternatively, widget.raise_() can be used
         self.cornerGrips = [QtWidgets.QSizeGrip(self) for i in range(4)]
         self.resize(1600, 900)
-       # self.setMinimumSize(800, 550)
         self.mainframe=QFrame(self)
         self.mainframe.setStyleSheet(
         """
@@ -104,34 +95,45 @@ class Main(QtWidgets.QMainWindow):
         grid_1.setVerticalSpacing(10)
         frame.setLayout(grid_1)
         #window_1
-        window_1 = QFrame(self)
-        grid_1.addWidget(window_1,0,1,1,1)
-        window_1.setStyleSheet("""
+        self.browser = QWebEngineView()
+        self.browser.setUrl(QUrl("https://google.com"))
+
+        grid_1.addWidget(self.browser,0,1,3,3)
+        self.browser.setStyleSheet("""
             border: 1px solid #BBBBBB;
             border-radius: 16px;     
             background: #1B1D1E;
                 """)
         #widgets_area
-        widgets_area = QFrame(self)
-        widgets_area.setFixedWidth(256)
-        widgets_area.setStyleSheet("""
-            background: rgba(255, 255, 255, 0.21);
-            border-radius: 16px;
-        """)
-        grid_1.addWidget(widgets_area,0,0,1,1)
    #Grid second
         grid_2 = QVBoxLayout()
-        widgets_area.setLayout(grid_2)
-        self.status = QStatusBar()
-      #  self.setStatusBar(self.statusBar)
-        grid_2.addWidget(self.status)
-    #Grid third
-        grid_3 = QGridLayout()
-        window_1.setLayout(grid_3)
-        self.browser = QWebEngineView()
-        self.browser.setUrl(QUrl("https://google.com"))
-        grid_3.addWidget(self.browser)
-        grid_3.setVerticalSpacing(-1)
+        grid_1.addLayout(grid_2,0,0,1,1)
+        grid_2.setContentsMargins(0,0,0,0)
+        grid_2.setSpacing(10)
+    #Grid 3
+        grid_3 = QHBoxLayout()
+        grid_2.addLayout(grid_3)
+        back_btn = QPushButton("<", self)
+        forward_btn = QPushButton(">",self)
+        reload_btn = QPushButton("0",self)
+        grid_3.addWidget(back_btn)
+        grid_3.addWidget(reload_btn)
+        grid_3.addWidget(forward_btn)
+    def resizeEvent(self, event):
+        QtWidgets.QMainWindow.resizeEvent(self, event)
+        self.updateGrips()
+    def mousePressEvent(self, event):
+        self.oldPosition = event.globalPos()
+    def mouseMoveEvent(self, event):
+        delta = QPoint(event.globalPos() - self.oldPosition)
+        self.move(self.x() + delta.x(),self.y() + delta.y())
+        self.oldPosition = event.globalPos()
+    def mouseDoubleClickEvent(self, event):
+        state = int(self.windowState())
+        if state == 0:
+            self.showMaximized()
+        else:
+            self.showNormal()
     @property
     def gripSize(self):
         return self._gripSize
@@ -192,21 +194,7 @@ class Main(QtWidgets.QMainWindow):
         self.sideGrips[3].setGeometry(
             self.gripSize, inRect.top() + inRect.height(), 
             inRect.width(), self.gripSize)
-    def resizeEvent(self, event):
-        QtWidgets.QMainWindow.resizeEvent(self, event)
-        self.updateGrips()
-    def mousePressEvent(self, event):
-        self.oldPosition = event.globalPos()
-    def mouseMoveEvent(self, event):
-        delta = QPoint(event.globalPos() - self.oldPosition)
-        self.move(self.x() + delta.x(),self.y() + delta.y())
-        self.oldPosition = event.globalPos()
-    def mouseDoubleClickEvent(self, event):
-        state = int(self.windowState())
-        if state == 0:
-            self.showMaximized()
-        else:
-            self.showNormal()
+
 app = QtWidgets.QApplication([])
 m = Main()
 m.show()
