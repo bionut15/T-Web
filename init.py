@@ -2,7 +2,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QPainterPath, QRegion
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFrame, QSizeGrip, QGridLayout, QVBoxLayout, QStatusBar, QHBoxLayout, QAction, QLineEdit
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QFrame, QSizeGrip, QGridLayout, QVBoxLayout, QStatusBar, QHBoxLayout, QAction, QLineEdit, QTabWidget
 from PyQt5.QtWebEngineWidgets import *
 from PyQt5.QtPrintSupport import *
 import os
@@ -72,38 +72,34 @@ class Main(QtWidgets.QMainWindow):
         self.mainframe=QFrame(self)
         self.mainframe.setStyleSheet(
         """
-        background-color:rgba(r, g, b, alpha);
+            QFrame{background-color:rgba(r, g, b, alpha);
             border: 1px solid #BBBBBB;
             border-radius: 24px;
             opacity: 0.6;
-                """)
+                }""")
         self.setCentralWidget(self.mainframe)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground, True)
         #main_frame
         frame =QtWidgets.QFrame(self)
         frame.setFrameShape(QFrame.StyledPanel)
-        frame.setLineWidth(0)
         frame.setStyleSheet("""
-            border: 1px solid #BBBBBB;
+            QFrame{border: 1px solid #BBBBBB;
             border-radius: 16px;     
             background: #1B1D1E;
-                """)
+                }""")
         self.setCentralWidget(frame)
     #Grid main
         grid_1 = QGridLayout()
-        grid_1.setHorizontalSpacing(10)
-        grid_1.setVerticalSpacing(10)
+        grid_1.setSpacing(0)
         frame.setLayout(grid_1)
         #window_1
         self.browser = QWebEngineView()
         self.browser.setUrl(QUrl("https://google.com"))
         grid_1.addWidget(self.browser,0,1,3,3)
         self.browser.setStyleSheet("""
-           
             border: 1px solid #BBBBBB;
             border-radius: 16em;     
-            background: #1B1D34
-            ;
+            background: #1B1D34;
                 """)
         #widgets_area
    #Grid second
@@ -114,16 +110,16 @@ class Main(QtWidgets.QMainWindow):
     #Grid 3
         grid_3 = QHBoxLayout()
 
-        back_btn = QPushButton("<", self)
+        back_btn = QPushButton("<=", self)
       #  back_btn.triggered.connect(self.browser.back)
         back_btn.setStyleSheet("""color:white;
                                height:2em;
                                 margin:2em;width:2em; border-radius: 1em;""")
-        forward_btn = QPushButton(">",self)
+        forward_btn = QPushButton("=>",self)
         forward_btn.setStyleSheet("""color:white;
                                height:2em;
                                 margin:2em;width:2em; border-radius: 1em;""")
-        reload_btn = QPushButton("O",self)
+        reload_btn = QPushButton("o",self)
         reload_btn.setStyleSheet("""color:white; height:2em;
                                 margin:2em;width:2em; border-radius: 1em;""")
         self.searchBar = QLineEdit()
@@ -131,7 +127,6 @@ class Main(QtWidgets.QMainWindow):
                 """
                 height:2em;
                 width:3em;
-                color: white;
                 border-radius: 1em;
                 """
                 )
@@ -140,11 +135,15 @@ class Main(QtWidgets.QMainWindow):
         grid_2.addWidget(self.searchBar)
         self.browser.urlChanged.connect(self.updateUrl)
         grid_2.addLayout(grid_3)
+        self.tabs = QTabWidget()
+        self.tabs.setFixedWidth(250)
+        self.tabs.setDocumentMode(True)
+        grid_2 .addWidget(self.tabs)
         grid_3.addWidget(back_btn)
         grid_3.addWidget(reload_btn)
         grid_3.addWidget(forward_btn)
         #method to load the required url
-    def loadUrl(self):
+    def loadUrl(self): 
         #fetching entered url from searchBar
         url = self.searchBar.text()
         #loading url
@@ -176,7 +175,7 @@ class Main(QtWidgets.QMainWindow):
             return
         self._gripSize = max(2, size)
         self.updateGrips()
-    def updateGrips(self):
+    def updateGrips(self): 
         self.setContentsMargins(*[self.gripSize] * 4)
 
         outRect = self.rect()
